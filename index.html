@@ -1,0 +1,3037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Groove — Vinyl for People Who Actually Listen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F5F0E8;
+      --ink: #1A1209;
+      --rust: #C4451A;
+      --warm: #D4A84B;
+      --olive: #4A5240;
+      --fog:  #E8E2D5;
+      --groove: #8B1A1A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Instrument Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: var(--cream);
+      border-bottom: 1px solid rgba(26,18,9,0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-logo span { color: var(--rust); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-cta {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 0.5rem 1.4rem;
+      border-radius: 2px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .nav-cta:hover { background: var(--rust); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 3rem 5rem 3rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 2rem;
+      height: 1px;
+      background: var(--rust);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      line-height: 1.0;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.8rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(26,18,9,0.65);
+      max-width: 28rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: var(--rust);
+      color: var(--cream);
+      border: none;
+      padding: 0.9rem 2rem;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover { background: var(--groove); transform: translateY(-1px); }
+
+    .btn-ghost {
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      opacity: 0.6;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-ghost:hover { opacity: 1; }
+
+    /* ── VINYL VISUAL ── */
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .vinyl-stage {
+      position: relative;
+      width: 420px;
+      height: 420px;
+    }
+
+    .vinyl-record {
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        #111 0deg,
+        #222 8deg,
+        #111 16deg,
+        #1a1a1a 24deg,
+        #111 32deg,
+        #222 40deg,
+        #111 48deg,
+        #1a1a1a 56deg,
+        #111 64deg,
+        #222 72deg,
+        #111 80deg,
+        #1a1a1a 88deg,
+        #111 96deg,
+        #222 104deg,
+        #111 112deg,
+        #1a1a1a 120deg,
+        #111 128deg,
+        #222 136deg,
+        #111 144deg,
+        #1a1a1a 152deg,
+        #111 160deg,
+        #222 168deg,
+        #111 176deg,
+        #1a1a1a 184deg,
+        #111 192deg,
+        #222 200deg,
+        #111 208deg,
+        #1a1a1a 216deg,
+        #111 224deg,
+        #222 232deg,
+        #111 240deg,
+        #1a1a1a 248deg,
+        #111 256deg,
+        #222 264deg,
+        #111 272deg,
+        #1a1a1a 280deg,
+        #111 288deg,
+        #222 296deg,
+        #111 304deg,
+        #1a1a1a 312deg,
+        #111 320deg,
+        #222 328deg,
+        #111 336deg,
+        #1a1a1a 344deg,
+        #111 352deg,
+        #222 360deg
+      );
+      position: absolute;
+      top: 20px; left: 20px;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.35), 0 4px 20px rgba(0,0,0,0.2);
+      animation: spin 18s linear infinite;
+    }
+
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .vinyl-label {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--rust);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+    }
+
+    .vinyl-label-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .vinyl-label-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+
+    .vinyl-hole {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--ink);
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Floating cards */
+    .float-card {
+      position: absolute;
+      background: white;
+      border-radius: 6px;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      font-size: 0.78rem;
+      animation: float 4s ease-in-out infinite;
+      max-width: 160px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .float-card-1 {
+      top: 40px; right: -10px;
+      animation-delay: 0s;
+    }
+
+    .float-card-2 {
+      bottom: 60px; left: -20px;
+      animation-delay: 1.5s;
+    }
+
+    .float-card-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 0.3rem;
+    }
+
+    .float-card-value {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .float-card-sub {
+      font-size: 0.68rem;
+      color: rgba(26,18,9,0.5);
+      margin-top: 0.1rem;
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 6rem 3rem; }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── PROBLEM STRIP ── */
+    .problem-strip {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 4rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 2px 1fr 2px 1fr;
+      gap: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-divider {
+      background: rgba(245,240,232,0.12);
+    }
+
+    .problem-item {
+      padding: 1rem 2.5rem;
+    }
+
+    .problem-item:first-child { padding-left: 0; }
+
+    .problem-no {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--rust);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+
+    .problem-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .problem-desc {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      opacity: 0.55;
+    }
+
+    /* ── FEATURES ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--fog);
+      border-radius: 4px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .feature-card:hover { transform: translateY(-3px); }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--rust);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover::before { transform: scaleX(1); }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .feature-desc {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: rgba(26,18,9,0.6);
+    }
+
+    .feature-tag {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rust);
+      border: 1px solid currentColor;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+    }
+
+    /* ── SHELF PREVIEW ── */
+    .shelf-section {
+      background: var(--olive);
+      color: var(--cream);
+    }
+
+    .shelf-section h2 { color: var(--cream); }
+
+    .shelf-section .section-label { color: var(--warm); }
+
+    .shelf-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 3rem;
+    }
+
+    .shelf-desc {
+      font-size: 1rem;
+      line-height: 1.75;
+      opacity: 0.75;
+      margin-bottom: 2rem;
+    }
+
+    .shelf-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .shelf-stat {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .shelf-stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--warm);
+      flex-shrink: 0;
+    }
+
+    /* Record shelf visual */
+    .record-shelf {
+      background: rgba(245,240,232,0.06);
+      border-radius: 6px;
+      padding: 2rem;
+    }
+
+    .shelf-row {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+      align-items: flex-end;
+    }
+
+    .record-spine {
+      width: 18px;
+      height: 90px;
+      border-radius: 2px;
+      position: relative;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .record-spine:hover { transform: translateY(-8px); }
+
+    .shelf-wood {
+      height: 10px;
+      background: rgba(212,168,75,0.3);
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ── MATCH SECTION ── */
+    .match-section { background: var(--cream); }
+
+    .match-ui {
+      margin-top: 3rem;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.08);
+      max-width: 700px;
+    }
+
+    .match-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--fog);
+    }
+
+    .match-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .match-badge {
+      background: var(--rust);
+      color: white;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .match-item {
+      display: grid;
+      grid-template-columns: 50px 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--fog);
+    }
+
+    .match-item:last-child { border-bottom: none; }
+
+    .match-art {
+      width: 50px;
+      height: 50px;
+      border-radius: 3px;
+    }
+
+    .match-info-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .match-info-artist {
+      font-size: 0.78rem;
+      color: rgba(26,18,9,0.5);
+      margin-bottom: 0.3rem;
+    }
+
+    .match-tags {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+    }
+
+    .match-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.06em;
+      background: var(--fog);
+      padding: 0.15rem 0.4rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .match-score {
+      text-align: right;
+    }
+
+    .match-pct {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--rust);
+    }
+
+    .match-pct-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      opacity: 0.5;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ROADMAP ── */
+    .roadmap-section {
+      background: var(--fog);
+    }
+
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .roadmap-phase {
+      position: relative;
+    }
+
+    .phase-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 900;
+      color: rgba(26,18,9,0.08);
+      line-height: 1;
+      position: absolute;
+      top: -1rem;
+      right: 0;
+    }
+
+    .phase-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 0.6rem;
+    }
+
+    .phase-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    .phase-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .phase-items li {
+      font-size: 0.82rem;
+      color: rgba(26,18,9,0.65);
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.4;
+    }
+
+    .phase-items li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--rust);
+      font-size: 0.7rem;
+    }
+
+    /* ── PM METRICS ── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .metric-card {
+      border: 1px solid rgba(26,18,9,0.12);
+      border-radius: 4px;
+      padding: 1.5rem;
+    }
+
+    .metric-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--rust);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: rgba(26,18,9,0.6);
+      line-height: 1.4;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+    }
+
+    .footer-logo span { color: var(--rust); }
+
+    .footer-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      opacity: 0.4;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.35s; }
+    .delay-4 { animation-delay: 0.5s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .problem-strip { grid-template-columns: 1fr; }
+      .problem-divider { display: none; }
+      .features { grid-template-columns: 1fr; }
+      .shelf-grid { grid-template-columns: 1fr; }
+      .roadmap-grid { grid-template-columns: 1fr 1fr; }
+      .metrics-row { grid-template-columns: 1fr 1fr; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+    }
+  
+    /* ══════════════════════════════════════════
+       APP MODAL OVERLAY
+    ══════════════════════════════════════════ */
+    .app-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26,18,9,0.7);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .app-modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .app-modal {
+      background: var(--cream);
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(40px);
+      transition: transform 0.35s cubic-bezier(0.34,1.1,0.64,1);
+    }
+    .app-modal-overlay.open .app-modal {
+      transform: translateY(0);
+    }
+    .app-close-btn {
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 1100;
+      background: rgba(26,18,9,0.85);
+      color: var(--cream);
+      border: none;
+      border-radius: 50%;
+      width: 38px; height: 38px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      line-height: 1;
+    }
+    .app-close-btn:hover { background: var(--rust); }
+    .app-modal-overlay.open ~ .app-close-btn,
+    .app-close-btn.visible { display: flex; }
+
+  </style>
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5F0E8;
+      --ink: #1A1209;
+      --rust: #C4451A;
+      --warm: #D4A84B;
+      --olive: #3D4435;
+      --fog: #E8E2D5;
+      --muted: rgba(26,18,9,0.5);
+      --groove: #8B1A1A;
+      --green: #2A6B3C;
+      --card: #FFFFFF;
+    }
+    .app-modal { font-family: 'Instrument Sans', sans-serif; }
+
+    #grain {
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.5;
+    }
+
+    /* ── SHELL ── */
+    .shell {
+      display: grid;
+      grid-template-rows: 56px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+      position: sticky; top: 0; z-index: 200;
+    }
+    .topbar-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+    .topbar-logo span { color: var(--rust); }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .topbar-step {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+    }
+    .topbar-user {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--rust);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar {
+      height: 3px;
+      background: rgba(245,240,232,0.1);
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--rust);
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      display: flex;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      background: var(--fog);
+      border-right: 1px solid rgba(26,18,9,0.1);
+      padding: 1.5rem 0;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-nav-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.65rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--ink);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      opacity: 0.5;
+    }
+    .sidebar-item.active {
+      opacity: 1;
+      border-left-color: var(--rust);
+      background: rgba(196,69,26,0.06);
+      font-weight: 600;
+    }
+    .sidebar-item.done {
+      opacity: 0.7;
+    }
+    .sidebar-item.done .step-check { color: var(--green); }
+    .sidebar-icon { font-size: 1rem; width: 20px; text-align: center; }
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(26,18,9,0.1);
+    }
+    .demo-badge {
+      background: var(--rust);
+      color: white;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.6rem;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .demo-note {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* ── SCREENS ── */
+    .screen {
+      display: none;
+      animation: fadeSlideIn 0.35s ease;
+    }
+    .screen.active { display: block; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateX(16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── SCREEN INNER ── */
+    .screen-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+    }
+    .screen-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 0.6rem;
+    }
+    .screen-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .screen-sub {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 2rem;
+    }
+
+    /* ── FORM ELEMENTS ── */
+    .form-group { margin-bottom: 1.2rem; }
+    .form-label {
+      display: block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: white;
+      border: 1.5px solid rgba(26,18,9,0.15);
+      border-radius: 3px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--ink);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--rust); }
+    .form-input.success { border-color: var(--green); }
+
+    /* ── TASTE CHIPS ── */
+    .chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .chip {
+      padding: 0.45rem 0.9rem;
+      border: 1.5px solid rgba(26,18,9,0.2);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+      background: white;
+    }
+    .chip:hover { border-color: var(--rust); color: var(--rust); }
+    .chip.selected {
+      background: var(--rust);
+      border-color: var(--rust);
+      color: white;
+      font-weight: 600;
+    }
+    .chips-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.6rem;
+      border: none;
+      border-radius: 3px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--rust); color: white; }
+    .btn-primary:hover { background: var(--groove); transform: translateY(-1px); }
+    .btn-primary:disabled { background: rgba(26,18,9,0.2); color: rgba(26,18,9,0.4); cursor: not-allowed; transform: none; }
+    .btn-secondary { background: var(--fog); color: var(--ink); }
+    .btn-secondary:hover { background: var(--cream); }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(26,18,9,0.2); color: var(--ink); }
+    .btn-outline:hover { border-color: var(--rust); color: var(--rust); }
+    .btn-green { background: var(--green); color: white; }
+    .btn-green:hover { background: #1e5230; transform: translateY(-1px); }
+    .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; align-items: center; }
+
+    /* ── RECORD CARDS ── */
+    .records-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .record-card {
+      background: white;
+      border-radius: 4px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .record-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .record-card.selected { border-color: var(--rust); }
+    .record-card.in-shelf { border-color: var(--green); }
+    .record-art {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .record-info { padding: 0.7rem; }
+    .record-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.15rem; line-height: 1.3; }
+    .record-artist { font-size: 0.72rem; color: var(--muted); }
+    .record-price { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--rust); margin-top: 0.3rem; font-weight: 500; }
+    .record-badge {
+      position: absolute;
+      top: 6px; right: 6px;
+      background: var(--rust);
+      color: white;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.4rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+    .record-badge.green { background: var(--green); }
+
+    /* ── SHELF VISUAL ── */
+    .shelf-display {
+      background: var(--olive);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .shelf-display-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.4);
+      margin-bottom: 1rem;
+    }
+    .shelf-spines {
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+      min-height: 80px;
+    }
+    .spine {
+      width: 16px;
+      border-radius: 2px 2px 0 0;
+      transition: all 0.3s;
+      position: relative;
+    }
+    .spine:hover { transform: translateY(-6px); }
+    .shelf-plank {
+      height: 8px;
+      background: rgba(212,168,75,0.35);
+      border-radius: 2px;
+      margin-top: 4px;
+    }
+    .shelf-empty {
+      color: rgba(245,240,232,0.25);
+      font-size: 0.82rem;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      min-height: 80px;
+    }
+
+    /* ── MATCH CARDS ── */
+    .match-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .match-row {
+      background: white;
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .match-row:hover { border-color: rgba(196,69,26,0.3); transform: translateX(3px); }
+    .match-row.chosen { border-color: var(--rust); background: rgba(196,69,26,0.03); }
+    .match-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .match-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; }
+    .match-meta { font-size: 0.75rem; color: var(--muted); }
+    .match-tags-row { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-top: 0.3rem; }
+    .mini-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.06em;
+      background: var(--fog);
+      padding: 0.15rem 0.4rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+    .match-pct { text-align: right; }
+    .match-pct-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--rust);
+      line-height: 1;
+    }
+    .match-pct-lbl {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── MATCH SCREEN TURNTABLE ── */
+    .match-turntable-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .match-turntable {
+      width: 260px;
+      height: 208px;
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px,
+          transparent 1px, transparent 6px
+        ),
+        linear-gradient(160deg, #5C3A1A 0%, #3A2210 40%, #2A1A0C 70%, #4A2E18 100%);
+      border-radius: 14px;
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.08) inset,
+        0 -2px 0 rgba(0,0,0,0.4) inset,
+        0 16px 48px rgba(0,0,0,0.4),
+        0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    .match-platter-well {
+      position: absolute;
+      top: 20px; left: 22px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: #1a1008;
+      box-shadow: 0 0 0 3px #0f0a04, 0 4px 16px rgba(0,0,0,0.6) inset;
+    }
+
+    .match-mat {
+      position: absolute;
+      top: 24px; left: 26px;
+      width: 152px; height: 152px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2a2a2a 0%, #1a1a1a 100%);
+    }
+
+    .match-record {
+      position: absolute;
+      top: 28px; left: 30px;
+      width: 144px; height: 144px;
+      border-radius: 50%;
+      animation: vinylSpin 2.2s linear infinite;
+      transform-origin: 50% 50%;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.7);
+    }
+
+    .match-record::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #0a0604;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+      z-index: 2;
+    }
+
+    .match-tonearm-base {
+      position: absolute;
+      top: 26px; right: 24px;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #e8e0d0, #a09080);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.25) inset;
+      z-index: 20;
+    }
+
+    .match-tonearm {
+      position: absolute;
+      top: 34px; right: 32px;
+      width: 110px; height: 4px;
+      background: linear-gradient(90deg, #c8bfb0, #a89888, #b8b0a0);
+      border-radius: 2px;
+      transform-origin: 100% 50%;
+      transform: rotate(-28deg);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      z-index: 15;
+      animation: tonearmDrop 1.4s cubic-bezier(0.34,1.1,0.64,1) 0.3s both;
+    }
+
+    .match-tonearm::before {
+      content: '';
+      position: absolute;
+      left: -8px; top: -3px;
+      width: 12px; height: 10px;
+      background: linear-gradient(135deg, #d0c8bc, #908880);
+      border-radius: 2px 0 0 3px;
+    }
+
+    .match-tonearm::after {
+      content: '';
+      position: absolute;
+      left: -12px; top: 7px;
+      width: 2px; height: 6px;
+      background: linear-gradient(180deg, #aaa, #444);
+      border-radius: 0 0 1px 1px;
+      transform: rotate(15deg);
+    }
+
+    .match-led {
+      position: absolute;
+      bottom: 16px; left: 18px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #2ABD6E;
+      box-shadow: 0 0 5px rgba(42,189,110,0.8);
+      animation: ledPulse 2.5s ease-in-out infinite;
+    }
+
+    .match-speed-btns {
+      position: absolute;
+      bottom: 14px; right: 16px;
+      display: flex; gap: 5px;
+    }
+
+    .match-speed-btn {
+      width: 24px; height: 12px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.38rem;
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+
+    .match-speed-btn.active {
+      background: linear-gradient(180deg, #C4451A, #9a3010);
+      color: rgba(255,255,255,0.9);
+      border-color: #C4451A;
+      box-shadow: 0 0 5px rgba(196,69,26,0.4);
+    }
+
+    /* record info below the turntable */
+    .match-record-info {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .match-record-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+
+    .match-record-artist {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .match-record-meta {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .match-price-badge {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--rust);
+    }
+
+    /* ── RECORD DETAIL ── */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      align-items: start;
+    }
+    .detail-cover {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .detail-cover svg { width: 100%; height: 100%; }
+    .detail-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 0.2rem;
+    }
+    .detail-artist { font-size: 1rem; color: var(--muted); margin-bottom: 1rem; }
+    .detail-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .detail-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid rgba(26,18,9,0.2);
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+    }
+    .detail-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--rust);
+      margin-bottom: 0.3rem;
+    }
+    .detail-condition {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .detail-seller-row {
+      background: var(--fog);
+      border-radius: 4px;
+      padding: 0.8rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 0.82rem;
+    }
+    .seller-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 0.8rem 1.2rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      z-index: 1000;
+      max-width: 300px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+    /* ── CONFIRMATION ── */
+    .confirm-box {
+      background: white;
+      border-radius: 6px;
+      padding: 2rem;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .confirm-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--fog);
+      font-size: 0.88rem;
+    }
+    .confirm-row:last-child { border-bottom: none; }
+    .confirm-label { color: var(--muted); }
+    .confirm-value { font-weight: 600; }
+    .confirm-total { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--rust); }
+
+    /* ── SUCCESS ── */
+    .success-screen {
+      text-align: center;
+      padding: 2.5rem 2rem 3rem;
+    }
+
+    /* ── TURNTABLE CABINET ── */
+    .turntable {
+      width: 300px;
+      height: 240px;
+      margin: 0 auto 2rem;
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px,
+          transparent 1px, transparent 6px
+        ),
+        linear-gradient(160deg, #5C3A1A 0%, #3A2210 40%, #2A1A0C 70%, #4A2E18 100%);
+      border-radius: 16px;
+      box-shadow:
+        0 2px 0 rgba(255,255,255,0.08) inset,
+        0 -2px 0 rgba(0,0,0,0.4) inset,
+        0 20px 60px rgba(0,0,0,0.45),
+        0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Platter recess */
+    .turntable-platter-well {
+      position: absolute;
+      top: 24px; left: 28px;
+      width: 184px; height: 184px;
+      border-radius: 50%;
+      background: #1a1008;
+      box-shadow: 0 0 0 3px #0f0a04, 0 4px 20px rgba(0,0,0,0.6) inset;
+    }
+
+    /* Spinning platter mat */
+    .turntable-mat {
+      position: absolute;
+      top: 28px; left: 32px;
+      width: 176px; height: 176px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2a2a2a 0%, #1a1a1a 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5) inset;
+    }
+
+    /* The vinyl record itself */
+    .turntable-record {
+      position: absolute;
+      top: 32px; left: 36px;
+      width: 168px; height: 168px;
+      border-radius: 50%;
+      background:
+        /* Label */
+        radial-gradient(circle at 50% 50%, #C4451A 0%, #A03A14 28%, transparent 28.5%),
+        /* Groove shimmer rings */
+        repeating-radial-gradient(
+          circle at 50%,
+          #111 0px, #111 1px,
+          #1c1c1c 1px, #1c1c1c 2.5px,
+          #141414 2.5px, #141414 4px,
+          #1a1a1a 4px, #1a1a1a 5px
+        );
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 4px 24px rgba(0,0,0,0.7);
+      animation: vinylSpin 2.2s linear infinite;
+      transform-origin: 50% 50%;
+    }
+
+    /* Label detail */
+    .turntable-record::after {
+      content: 'GROOVE';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 47px; height: 47px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.38rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.7);
+      background: radial-gradient(circle, #d44e1e 0%, #9a3010 100%);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.4) inset;
+    }
+
+    /* Spindle hole */
+    .turntable-spindle {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #0a0604;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+      z-index: 10;
+      pointer-events: none;
+      /* sits on top of record via z-index, not animated */
+    }
+
+    @keyframes vinylSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Tonearm pivot base */
+    .tonearm-base {
+      position: absolute;
+      top: 30px; right: 30px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #e8e0d0, #a09080);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.3) inset;
+      z-index: 20;
+    }
+
+    /* The arm itself */
+    .tonearm {
+      position: absolute;
+      top: 40px; right: 40px;
+      width: 130px; height: 5px;
+      background: linear-gradient(90deg, #c8bfb0, #a89888, #b8b0a0);
+      border-radius: 3px;
+      transform-origin: 100% 50%;
+      transform: rotate(-28deg);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      z-index: 15;
+      animation: tonearmDrop 1.4s cubic-bezier(0.34, 1.1, 0.64, 1) 0.5s both;
+    }
+
+    @keyframes tonearmDrop {
+      from { transform: rotate(-48deg); }
+      to   { transform: rotate(-28deg); }
+    }
+
+    /* Headshell / cartridge */
+    .tonearm::before {
+      content: '';
+      position: absolute;
+      left: -10px; top: -4px;
+      width: 14px; height: 12px;
+      background: linear-gradient(135deg, #d0c8bc, #908880);
+      border-radius: 2px 0 0 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* Stylus */
+    .tonearm::after {
+      content: '';
+      position: absolute;
+      left: -14px; top: 8px;
+      width: 2px; height: 8px;
+      background: linear-gradient(180deg, #aaa, #444);
+      border-radius: 0 0 1px 1px;
+      transform: rotate(15deg);
+    }
+
+    /* Anti-skate weight dot */
+    .tonearm-weight {
+      position: absolute;
+      top: 36px; right: 36px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #f0e8d8, #888);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      z-index: 25;
+      animation: tonearmDrop 1.4s cubic-bezier(0.34, 1.1, 0.64, 1) 0.5s both;
+    }
+
+    /* Speed buttons bottom right */
+    .turntable-controls {
+      position: absolute;
+      bottom: 18px; right: 20px;
+      display: flex; gap: 6px;
+    }
+
+    .speed-btn {
+      width: 28px; height: 14px;
+      border-radius: 3px;
+      background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.42rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.05em;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: linear-gradient(180deg, #C4451A, #9a3010);
+      color: rgba(255,255,255,0.9);
+      border-color: #C4451A;
+      box-shadow: 0 0 6px rgba(196,69,26,0.4);
+    }
+
+    /* Power LED */
+    .turntable-led {
+      position: absolute;
+      bottom: 22px; left: 22px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #2ABD6E;
+      box-shadow: 0 0 6px rgba(42,189,110,0.8), 0 0 12px rgba(42,189,110,0.3);
+      animation: ledPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes ledPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(42,189,110,0.8), 0 0 12px rgba(42,189,110,0.3); }
+      50%       { opacity: 0.7; box-shadow: 0 0 3px rgba(42,189,110,0.5); }
+    }
+
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+    .success-sub { color: var(--muted); line-height: 1.6; max-width: 340px; margin: 0 auto 2rem; font-size: 0.9rem; }
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .stat-pill {
+      background: white;
+      border: 1.5px solid var(--fog);
+      border-radius: 100px;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .stat-pill span { color: var(--rust); }
+
+    /* ── LIVE FEED ── */
+    .live-feed {
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      margin-bottom: 1.5rem;
+    }
+    .feed-header {
+      background: var(--fog);
+      padding: 0.7rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .feed-item {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--fog);
+      font-size: 0.82rem;
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      animation: feedIn 0.4s ease;
+    }
+    @keyframes feedIn { from { opacity: 0; background: rgba(196,69,26,0.05); } to { opacity: 1; background: transparent; } }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-time { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); flex-shrink: 0; margin-top: 2px; }
+
+    /* ── SEARCH BAR ── */
+    .search-bar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .search-input {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      background: white;
+      border: 1.5px solid rgba(26,18,9,0.15);
+      border-radius: 3px;
+      font-family: 'Instrument Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--rust); }
+    .search-btn {
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      border-radius: 3px;
+      padding: 0 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .search-btn:hover { background: var(--rust); }
+
+    /* ── SECTION DIVIDERS ── */
+    .divider {
+      height: 1px;
+      background: rgba(26,18,9,0.08);
+      margin: 1.5rem 0;
+    }
+    .section-heading {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    /* ── STEP INDICATOR ── */
+    .step-indicator {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .step-dot {
+      height: 3px;
+      flex: 1;
+      border-radius: 2px;
+      background: rgba(26,18,9,0.12);
+      transition: background 0.3s;
+    }
+    .step-dot.done { background: var(--rust); }
+    .step-dot.active { background: var(--rust); opacity: 0.5; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      .detail-layout { grid-template-columns: 1fr; }
+      .detail-cover { max-width: 200px; }
+    }
+  
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Gr<span>○</span>ove</div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#shelf">Shelves</a></li>
+    <li><a href="#match">Matching</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="openApp(event)">Try the Demo →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow fade-up">A new kind of vinyl platform</div>
+    <h1 class="fade-up delay-1">Vinyl for people who <em>actually</em> listen.</h1>
+    <p class="hero-sub fade-up delay-2">Groove connects collectors through taste, not just transactions. Build your shelf, join listening rooms, and find the records you need from people who get it.</p>
+    <div class="hero-actions fade-up delay-3">
+      <a href="#" class="btn-primary" onclick="openApp(event)">Try Interactive Demo →</a>
+      <a href="#roadmap" class="btn-ghost">See the roadmap →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="vinyl-stage fade-up delay-2">
+      <div class="vinyl-record">
+        <div class="vinyl-label">
+          <div class="vinyl-label-title">Groove</div>
+          <div class="vinyl-label-sub">Side A — 33 RPM</div>
+          <div class="vinyl-hole"></div>
+        </div>
+      </div>
+      <div class="float-card float-card-1">
+        <div class="float-card-label">Taste Match</div>
+        <div class="float-card-value">94% compatible</div>
+        <div class="float-card-sub">with @velvetmornings</div>
+      </div>
+      <div class="float-card float-card-2">
+        <div class="float-card-label">Listening Room</div>
+        <div class="float-card-value">Jazz at Midnight</div>
+        <div class="float-card-sub">12 people · live now</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM STRIP -->
+<div class="problem-strip">
+  <div class="problem-item">
+    <div class="problem-no">01</div>
+    <div class="problem-title">Discogs is a spreadsheet</div>
+    <div class="problem-desc">Powerful for cataloging, but cold. No sense of community or shared taste — just prices and condition grades.</div>
+  </div>
+  <div class="problem-divider"></div>
+  <div class="problem-item">
+    <div class="problem-no">02</div>
+    <div class="problem-title">eBay has no curation</div>
+    <div class="problem-desc">You either know the exact record you want, or you're lost. Discovery is algorithmic, not human.</div>
+  </div>
+  <div class="problem-divider"></div>
+  <div class="problem-item">
+    <div class="problem-no">03</div>
+    <div class="problem-title">Reddit is chaotic</div>
+    <div class="problem-desc">r/vinyl is great for conversation but terrible for commerce. No structure, no trust layer, no trade matching.</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">What makes Groove different</div>
+  <h2>Built around listening, not listings.</h2>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🎵</div>
+      <div class="feature-title">Listening Rooms</div>
+      <div class="feature-desc">Virtual rooms where collectors spin records together. Drop into a Jazz at Midnight session, discover a new album, and follow the host's shelf — then buy what caught your ear.</div>
+      <div class="feature-tag">Discovery</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤝</div>
+      <div class="feature-title">Taste Matching</div>
+      <div class="feature-desc">Our algorithm builds a taste profile from your shelf tags and listening history. When you list a record, it surfaces buyers who actually want it — not just the highest bidder.</div>
+      <div class="feature-tag">Commerce</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <div class="feature-title">Curated Shelves</div>
+      <div class="feature-desc">Your collection is a statement. Organize by mood, era, genre, or vibe. Share shelves publicly. Follow collectors whose taste you trust. Browse shelves like you'd browse a record store.</div>
+      <div class="feature-tag">Collection</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-title">Trade Circles</div>
+      <div class="feature-desc">List records you want to swap, not just sell. Groove finds multi-party trade loops — you give A what B has, B gives C what they need, C closes the circle. No cash needed.</div>
+      <div class="feature-tag">Trading</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏷️</div>
+      <div class="feature-title">Contextual Pricing</div>
+      <div class="feature-desc">Prices aren't just condition grades. Groove factors in pressing rarity, regional demand, and recent sale velocity to show you what a record is actually worth right now.</div>
+      <div class="feature-tag">Pricing</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Local First</div>
+      <div class="feature-desc">Before shipping, Groove finds collectors near you who have what you want. Save on shipping, avoid damage risk, and meet people in your local scene. Pickup encouraged.</div>
+      <div class="feature-tag">Community</div>
+    </div>
+  </div>
+</section>
+
+<!-- SHELF SECTION -->
+<section id="shelf" class="shelf-section">
+  <div class="section-label">Shelves</div>
+  <h2>Your collection tells a story.</h2>
+  <div class="shelf-grid">
+    <div>
+      <p class="shelf-desc">Groove shelves are more than a catalog. Assign vibes, eras, and moods to each record. Share a shelf publicly and let it speak for your taste. Follow shelves from collectors you admire. Every shelf is browsable, searchable, and shoppable.</p>
+      <div class="shelf-stats">
+        <div class="shelf-stat"><div class="shelf-stat-dot"></div>Tag by mood: late night, driving, morning coffee</div>
+        <div class="shelf-stat"><div class="shelf-stat-dot"></div>Mark records as: For Sale · For Trade · Grail · Wishlist</div>
+        <div class="shelf-stat"><div class="shelf-stat-dot"></div>Share shelf links on any social platform</div>
+        <div class="shelf-stat"><div class="shelf-stat-dot"></div>Embed your shelf on your own website</div>
+      </div>
+    </div>
+    <div class="record-shelf">
+      <div class="shelf-row">
+        <div class="record-spine" style="background: #8B1A1A; height:85px;"></div>
+        <div class="record-spine" style="background: #2C4A2E; height:90px;"></div>
+        <div class="record-spine" style="background: #1A3A5C; height:78px;"></div>
+        <div class="record-spine" style="background: #5C3A1A; height:92px;"></div>
+        <div class="record-spine" style="background: #4A1A5C; height:82px;"></div>
+        <div class="record-spine" style="background: #2C1A1A; height:88px;"></div>
+        <div class="record-spine" style="background: #1A4A3A; height:75px;"></div>
+        <div class="record-spine" style="background: #5C4A1A; height:91px;"></div>
+        <div class="record-spine" style="background: #3A1A1A; height:84px;"></div>
+        <div class="record-spine" style="background: #1A2C5C; height:79px;"></div>
+        <div class="record-spine" style="background: #4A3A1A; height:87px;"></div>
+        <div class="record-spine" style="background: #1A4A1A; height:93px;"></div>
+      </div>
+      <div class="shelf-wood"></div>
+      <div class="shelf-row">
+        <div class="record-spine" style="background: #5C1A3A; height:80px;"></div>
+        <div class="record-spine" style="background: #1A5C4A; height:86px;"></div>
+        <div class="record-spine" style="background: #3A3A1A; height:72px;"></div>
+        <div class="record-spine" style="background: #1A1A5C; height:89px;"></div>
+        <div class="record-spine" style="background: #5C2C1A; height:83px;"></div>
+        <div class="record-spine" style="background: #1A5C1A; height:77px;"></div>
+        <div class="record-spine" style="background: #3A1A5C; height:90px;"></div>
+        <div class="record-spine" style="background: #5C5C1A; height:81px;"></div>
+        <div class="record-spine" style="background: #1A3A1A; height:85px;"></div>
+        <div class="record-spine" style="background: #4A1A3A; height:76px;"></div>
+      </div>
+      <div class="shelf-wood"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MATCH SECTION -->
+<section id="match" class="match-section">
+  <div class="section-label">Taste Matching</div>
+  <h2>Find buyers who <em style="font-family:'Playfair Display',serif; color:var(--rust);">get</em> it.</h2>
+  <p style="max-width:34rem; color:rgba(26,18,9,0.6); line-height:1.7; margin-top:0.5rem;">When you list a record, Groove ranks potential buyers by taste compatibility — not just proximity or price. Sell to someone who will actually love it.</p>
+  <div class="match-ui">
+    <div class="match-header">
+      <div class="match-title">Matches for: Kind of Blue — Miles Davis</div>
+      <div class="match-badge">3 matches found</div>
+    </div>
+    <div class="match-item">
+      <svg width="50" height="50" viewBox="0 0 50 50" class="match-art">
+        <rect width="50" height="50" fill="#1A3A5C"/>
+        <circle cx="25" cy="25" r="15" fill="none" stroke="#D4A84B" stroke-width="1.5"/>
+        <circle cx="25" cy="25" r="5" fill="#D4A84B"/>
+      </svg>
+      <div>
+        <div class="match-info-title">@velvetmornings</div>
+        <div class="match-info-artist">Sarah K. · Brooklyn, NY · 4.9★ seller/buyer</div>
+        <div class="match-tags">
+          <span class="match-tag">Jazz</span>
+          <span class="match-tag">Late Night</span>
+          <span class="match-tag">Blue Note</span>
+          <span class="match-tag">Modal</span>
+        </div>
+      </div>
+      <div class="match-score">
+        <div class="match-pct">94%</div>
+        <div class="match-pct-label">taste match</div>
+      </div>
+    </div>
+    <div class="match-item">
+      <svg width="50" height="50" viewBox="0 0 50 50" class="match-art">
+        <rect width="50" height="50" fill="#2C1A1A"/>
+        <rect x="10" y="30" width="30" height="3" fill="#C4451A"/>
+        <rect x="15" y="20" width="20" height="3" fill="#C4451A" opacity="0.6"/>
+        <rect x="20" y="10" width="10" height="3" fill="#C4451A" opacity="0.3"/>
+      </svg>
+      <div>
+        <div class="match-info-title">@deepgroovemike</div>
+        <div class="match-info-artist">Mike T. · Chicago, IL · 4.7★ seller/buyer</div>
+        <div class="match-tags">
+          <span class="match-tag">Jazz</span>
+          <span class="match-tag">Hard Bop</span>
+          <span class="match-tag">Prestige</span>
+        </div>
+      </div>
+      <div class="match-score">
+        <div class="match-pct">87%</div>
+        <div class="match-pct-label">taste match</div>
+      </div>
+    </div>
+    <div class="match-item">
+      <svg width="50" height="50" viewBox="0 0 50 50" class="match-art">
+        <rect width="50" height="50" fill="#1A4A3A"/>
+        <polygon points="25,10 40,38 10,38" fill="none" stroke="#F5F0E8" stroke-width="1.5"/>
+      </svg>
+      <div>
+        <div class="match-info-title">@analoguehours</div>
+        <div class="match-info-artist">Priya M. · Austin, TX · 5.0★ seller/buyer</div>
+        <div class="match-tags">
+          <span class="match-tag">Jazz</span>
+          <span class="match-tag">Columbia</span>
+          <span class="match-tag">1950s</span>
+        </div>
+      </div>
+      <div class="match-score">
+        <div class="match-pct">81%</div>
+        <div class="match-pct-label">taste match</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="roadmap-section">
+  <div class="section-label">Product Roadmap</div>
+  <h2>How we get there.</h2>
+  <div class="roadmap-grid">
+    <div class="roadmap-phase">
+      <div class="phase-number">1</div>
+      <div class="phase-label">MVP — Month 1–3</div>
+      <div class="phase-title">Foundation</div>
+      <ul class="phase-items">
+        <li>User profiles + shelf building</li>
+        <li>Manual record tagging (genre, mood, era)</li>
+        <li>Basic buy/sell listings</li>
+        <li>Discogs API import for catalog data</li>
+        <li>Trust & rating system</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-number">2</div>
+      <div class="phase-label">Beta — Month 4–6</div>
+      <div class="phase-title">Discovery</div>
+      <ul class="phase-items">
+        <li>Taste matching algorithm v1</li>
+        <li>Listening Rooms (live audio via WebRTC)</li>
+        <li>Trade Circle matchmaking</li>
+        <li>Shelf embed widget</li>
+        <li>Mobile app (React Native)</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-number">3</div>
+      <div class="phase-label">Launch — Month 7–9</div>
+      <div class="phase-title">Commerce</div>
+      <ul class="phase-items">
+        <li>Stripe payment integration</li>
+        <li>Contextual pricing engine</li>
+        <li>Local pickup coordination</li>
+        <li>Record grading photo AI</li>
+        <li>Seller analytics dashboard</li>
+      </ul>
+    </div>
+    <div class="roadmap-phase">
+      <div class="phase-number">4</div>
+      <div class="phase-label">Growth — Month 10+</div>
+      <div class="phase-title">Scale</div>
+      <ul class="phase-items">
+        <li>Record store partnerships</li>
+        <li>Artist-direct releases</li>
+        <li>Pressing run crowdfunding</li>
+        <li>B2B API for shops</li>
+        <li>International expansion</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section>
+  <div class="section-label">PM Success Metrics</div>
+  <h2>How we'll know it's working.</h2>
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-number">D30</div>
+      <div class="metric-label">Day-30 retention target: 40%+ of signed-up collectors return weekly</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-number">3.2×</div>
+      <div class="metric-label">Target GMV lift vs. cold listing: taste-matched sales close faster & higher</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-number">15min</div>
+      <div class="metric-label">Average session time target in Listening Rooms — a proxy for community health</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-number">NPS 65</div>
+      <div class="metric-label">Net Promoter Score target — vinyl collectors are vocal advocates when delighted</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Gr<span>○</span>ove</div>
+  <div class="footer-note">A product design portfolio project · Built with care</div>
+</footer>
+
+<script>
+
+  function openApp(e) {
+    if (e) e.preventDefault();
+    document.getElementById('appModal').classList.add('open');
+    document.getElementById('appCloseBtn').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeApp() {
+    document.getElementById('appModal').classList.remove('open');
+    document.getElementById('appCloseBtn').classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeApp(); });
+
+  // Scroll-triggered fade-in for sections
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) {
+        el.target.style.opacity = '1';
+        el.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.feature-card, .roadmap-phase, .metric-card, .match-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+
+<!-- ══ APP MODAL ══ -->
+<div class="app-modal-overlay" id="appModal">
+  <div class="app-modal">
+
+
+<div id="grain"></div>
+<div class="shell">
+  <!-- TOP BAR -->
+  <div class="topbar" style="position:relative;">
+    <div class="topbar-logo">Gr<span>○</span>ove <span style="font-size:0.7rem; opacity:0.4; font-family:'DM Mono',monospace; font-weight:300; margin-left:0.5rem;">interactive prototype</span></div>
+    <div class="topbar-right">
+      <div class="topbar-step" id="stepLabel">Step 1 of 6</div>
+      <div class="topbar-user" id="userAvatar">?</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:16%"></div></div>
+  </div>
+
+  <div class="main">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-nav-label" style="margin-bottom:1rem;">Your Journey</div>
+      <div class="sidebar-item active" id="nav-0" onclick="sidebarNav(0)">
+        <span class="sidebar-icon">👤</span> <span>Sign Up</span>
+      </div>
+      <div class="sidebar-item" id="nav-1" onclick="sidebarNav(1)">
+        <span class="sidebar-icon">🎵</span> <span>Taste Profile</span>
+      </div>
+      <div class="sidebar-item" id="nav-2" onclick="sidebarNav(2)">
+        <span class="sidebar-icon">📚</span> <span>Build Shelf</span>
+      </div>
+      <div class="sidebar-item" id="nav-3" onclick="sidebarNav(3)">
+        <span class="sidebar-icon">🔍</span> <span>Discover</span>
+      </div>
+      <div class="sidebar-item" id="nav-4" onclick="sidebarNav(4)">
+        <span class="sidebar-icon">🤝</span> <span>Match & Buy</span>
+      </div>
+      <div class="sidebar-item" id="nav-5" onclick="sidebarNav(5)">
+        <span class="sidebar-icon">✅</span> <span>Confirm & Pay</span>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="demo-badge">Live Demo</div>
+        <div class="demo-note">Every button does something. Your choices shape what happens next.</div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ══════════════════════════════════
+           SCREEN 0: SIGN UP
+      ══════════════════════════════════ -->
+      <div class="screen active" id="screen-0">
+        <div class="screen-inner">
+          <div class="step-indicator">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div><div class="step-dot"></div>
+            <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+          </div>
+          <div class="screen-eyebrow">Welcome to Groove</div>
+          <div class="screen-title">Create your account.</div>
+          <div class="screen-sub">Join the community built around listening, not just buying. Takes 60 seconds.</div>
+
+          <div class="form-group">
+            <label class="form-label">Your name</label>
+            <input class="form-input" id="nameInput" type="text" placeholder="e.g. Alex Rivera" oninput="validateSignup()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input class="form-input" id="usernameInput" type="text" placeholder="e.g. @velvetmornings" oninput="formatUsername(this); validateSignup()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" id="emailInput" type="email" placeholder="you@example.com" oninput="validateSignup()"/>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="signupBtn" disabled onclick="doSignup()">Create Account →</button>
+            <span style="font-size:0.78rem; color:var(--muted);">Already a member? <a href="#" style="color:var(--rust);">Sign in</a></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           SCREEN 1: TASTE PROFILE
+      ══════════════════════════════════ -->
+      <div class="screen" id="screen-1">
+        <div class="screen-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div><div class="step-dot active"></div>
+            <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+          </div>
+          <div class="screen-eyebrow">Step 2 — Taste Profile</div>
+          <div class="screen-title">What moves you?</div>
+          <div class="screen-sub">Pick genres and moods that resonate. We use this to match you with the right records and the right people. Choose at least 3.</div>
+
+          <div class="section-heading">Genres</div>
+          <div class="chips-grid" id="genreChips">
+            <div class="chip" onclick="toggleChip(this,'genre')">Jazz</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Soul</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Hip-Hop</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Electronic</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Funk</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Rock</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Classical</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Reggae</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Blues</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Latin</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">R&amp;B</div>
+            <div class="chip" onclick="toggleChip(this,'genre')">Ambient</div>
+          </div>
+
+          <div class="section-heading">Moods & Vibes</div>
+          <div class="chips-grid" id="moodChips">
+            <div class="chip" onclick="toggleChip(this,'mood')">Late night</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Morning coffee</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Driving</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Party</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Melancholic</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Focus</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Euphoric</div>
+            <div class="chip" onclick="toggleChip(this,'mood')">Chill</div>
+          </div>
+
+          <div class="chips-count" id="tasteCount">0 selected — pick at least 3</div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="tasteBtn" disabled onclick="doTaste()">Build My Profile →</button>
+            <button class="btn btn-secondary" onclick="goToScreen(0)">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           SCREEN 2: BUILD SHELF
+      ══════════════════════════════════ -->
+      <div class="screen" id="screen-2">
+        <div class="screen-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div>
+            <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot"></div>
+          </div>
+          <div class="screen-eyebrow">Step 3 — Your Shelf</div>
+          <div class="screen-title">Start your collection.</div>
+          <div class="screen-sub">Add some records you already own. This seeds your taste profile and lets others follow your shelf. Click to add — your shelf updates live.</div>
+
+          <div class="shelf-display">
+            <div class="shelf-display-title">Your shelf · <span id="shelfCount">0</span> records</div>
+            <div class="shelf-spines" id="shelfSpines">
+              <div class="shelf-empty">Your records will appear here…</div>
+            </div>
+            <div class="shelf-plank"></div>
+          </div>
+
+          <div class="section-heading">Suggested based on your taste</div>
+          <div class="records-grid" id="shelfRecords"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="shelfBtn" disabled onclick="doShelf()">Save My Shelf →</button>
+            <button class="btn btn-secondary" onclick="goToScreen(1)">← Back</button>
+            <span style="font-size:0.78rem; color:var(--muted);" id="shelfHint">Add at least 2 records</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           SCREEN 3: DISCOVER
+      ══════════════════════════════════ -->
+      <div class="screen" id="screen-3">
+        <div class="screen-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div>
+            <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
+          </div>
+          <div class="screen-eyebrow">Step 4 — Discover</div>
+          <div class="screen-title">Find your next record.</div>
+          <div class="screen-sub">Browse records curated for your taste, or search for something specific. Click any record to see details and matched sellers.</div>
+
+          <div class="search-bar">
+            <input class="search-input" id="searchInput" type="text" placeholder="Search artist, album, label…" oninput="filterRecords()"/>
+            <button class="search-btn" onclick="filterRecords()">🔍</button>
+          </div>
+
+          <div class="live-feed" id="liveFeed">
+            <div class="feed-header"><div class="live-dot"></div> Live activity</div>
+            <div class="feed-item"><span class="feed-time">now</span><span>@deepgroovemike just listed <strong>Bitches Brew</strong> — Miles Davis</span></div>
+            <div class="feed-item"><span class="feed-time">2m</span><span>@vinylsunset completed a trade: <strong>Innervisions</strong> ↔ <strong>There's a Riot Goin' On</strong></span></div>
+            <div class="feed-item"><span class="feed-time">5m</span><span>@crate_lucia opened a Listening Room: <strong>Late Night Jazz Sessions</strong> — 8 people listening</span></div>
+          </div>
+
+          <div class="section-heading">Matched for you</div>
+          <div class="records-grid" id="discoverRecords"></div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           SCREEN 4: MATCH & BUY
+      ══════════════════════════════════ -->
+      <div class="screen" id="screen-4">
+        <div class="screen-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div>
+            <div class="step-dot done"></div><div class="step-dot active"></div><div class="step-dot"></div>
+          </div>
+          <div class="screen-eyebrow">Step 5 — Taste Matching</div>
+          <div class="screen-title" id="matchTitle">Choose your seller.</div>
+          <div class="screen-sub" id="matchSub">Groove found these sellers based on taste compatibility — not just price. Each one has records you'll love and a track record you can trust.</div>
+
+          <div id="selectedRecordDetail"></div>
+
+          <div class="section-heading">Matched sellers</div>
+          <div class="match-list" id="matchList"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="matchBtn" disabled onclick="doMatch()">Contact Seller →</button>
+            <button class="btn btn-secondary" onclick="goToScreen(3)">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           SCREEN 5: CONFIRM & PAY
+      ══════════════════════════════════ -->
+      <div class="screen" id="screen-5">
+        <div class="screen-inner">
+          <div class="step-indicator">
+            <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot done"></div>
+            <div class="step-dot done"></div><div class="step-dot done"></div><div class="step-dot active"></div>
+          </div>
+          <div class="screen-eyebrow">Step 6 — Confirm & Pay</div>
+          <div class="screen-title">Almost yours.</div>
+          <div class="screen-sub">Review the details before confirming. Groove holds payment in escrow until you confirm the record arrived safely.</div>
+
+          <div class="confirm-box" id="confirmBox"></div>
+
+          <div class="form-group">
+            <label class="form-label">Shipping address</label>
+            <input class="form-input" id="addressInput" type="text" placeholder="123 Main St, Brooklyn, NY 11201" oninput="validatePayment()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Card number (demo — any 16 digits)</label>
+            <input class="form-input" id="cardInput" type="text" placeholder="•••• •••• •••• ••••" maxlength="19" oninput="formatCard(this); validatePayment()"/>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-green" id="payBtn" disabled onclick="doPay()">🔒 Confirm Purchase</button>
+            <button class="btn btn-secondary" onclick="goToScreen(4)">← Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════
+           SCREEN 6: SUCCESS
+      ══════════════════════════════════ -->
+      <div class="screen" id="screen-6">
+        <div class="screen-inner">
+          <div class="success-screen">
+
+            <!-- Skeuomorphic turntable -->
+            <div class="turntable" id="turntable">
+              <div class="turntable-platter-well"></div>
+              <div class="turntable-mat"></div>
+              <div class="turntable-record" id="vinylRecord"></div>
+              <div class="turntable-spindle"></div>
+              <div class="tonearm-base"></div>
+              <div class="tonearm" id="tonearm"></div>
+              <div class="tonearm-weight" id="tonearmWeight"></div>
+              <div class="turntable-led"></div>
+              <div class="turntable-controls">
+                <div class="speed-btn active">33⅓</div>
+                <div class="speed-btn">45</div>
+              </div>
+            </div>
+            <div class="success-title">It's on its way. 🎉</div>
+            <div class="success-sub" id="successMsg">Your purchase is confirmed. Payment is held in escrow — you'll release it once the record arrives safely.</div>
+            <div class="stats-row" id="successStats"></div>
+            <div class="btn-row" style="justify-content:center; gap:1rem;">
+              <button class="btn btn-primary" onclick="restart()">Start Over (Demo)</button>
+              <button class="btn btn-outline" onclick="showToast('📋 Link copied!','Shelf link copied to clipboard')">Share My Shelf</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- TOAST -->
+<div id="toast">
+  <span class="toast-icon" id="toastIcon">✓</span>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  name: '', username: '', email: '',
+  genres: [], moods: [],
+  shelf: [],
+  selectedRecord: null,
+  selectedSeller: null,
+  currentScreen: 0,
+};
+
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const SHELF_RECORDS = [
+  { id:1, title:'Kind of Blue', artist:'Miles Davis', color:'#1A3A5C', accent:'#D4A84B', tags:['Jazz','Modal','Late Night'], price:'$38' },
+  { id:2, title:'Innervisions', artist:'Stevie Wonder', color:'#2A4A1A', accent:'#F5C842', tags:['Soul','R&B','Classic'], price:'$45' },
+  { id:3, title:'Endtroducing…', artist:'DJ Shadow', color:'#1A1A3A', accent:'#8B6FD4', tags:['Hip-Hop','Electronic','Ambient'], price:'$52' },
+  { id:4, title:'Moanin\'', artist:'Art Blakey', color:'#3A1A1A', accent:'#C4451A', tags:['Jazz','Hard Bop','Live'], price:'$29' },
+  { id:5, title:'There\'s a Riot…', artist:'Sly & Family Stone', color:'#2A1A3A', accent:'#D4A84B', tags:['Funk','Soul','Psychedelic'], price:'$41' },
+  { id:6, title:'Blue Train', artist:'John Coltrane', color:'#0A2A4A', accent:'#4A9FD4', tags:['Jazz','Hard Bop','Blue Note'], price:'$34' },
+  { id:7, title:'Donuts', artist:'J Dilla', color:'#1A2A1A', accent:'#7BC67E', tags:['Hip-Hop','Beats','Sample'], price:'$67' },
+  { id:8, title:'Dummy', artist:'Portishead', color:'#2A2A1A', accent:'#D4C4A8', tags:['Electronic','Trip-Hop','Late Night'], price:'$48' },
+];
+
+const DISCOVER_RECORDS = [
+  { id:9, title:'Bitches Brew', artist:'Miles Davis', color:'#0A1A2A', accent:'#C4451A', tags:['Jazz','Fusion','Avant-Garde'], price:'$78', match:'96%' },
+  { id:10, title:'Head Hunters', artist:'Herbie Hancock', color:'#1A2A0A', accent:'#7BC67E', tags:['Jazz','Funk','Electric'], price:'$44', match:'91%' },
+  { id:11, title:'Madvillainy', artist:'Madvillain', color:'#2A1A0A', accent:'#D4A84B', tags:['Hip-Hop','Underground','Beats'], price:'$89', match:'88%' },
+  { id:12, title:'On the Corner', artist:'Miles Davis', color:'#0A2A1A', accent:'#4AD4A8', tags:['Jazz','Funk','Electric'], price:'$55', match:'85%' },
+  { id:13, title:'Voodoo', artist:'D\'Angelo', color:'#1A0A2A', accent:'#D48BD4', tags:['Soul','R&B','Neo-Soul'], price:'$62', match:'83%' },
+  { id:14, title:'Midnight Marauders', artist:'A Tribe Called Quest', color:'#2A1A1A', accent:'#D4C41A', tags:['Hip-Hop','Jazz-Rap','Classic'], price:'$71', match:'81%' },
+];
+
+const SELLERS = [
+  { name:'velvetmornings', location:'Brooklyn, NY', rating:'4.9', trades:47, pct:96, color:'#1A3A5C', tags:['Jazz','Late Night','Blue Note'] },
+  { name:'deepgroovemike', location:'Chicago, IL', rating:'4.7', trades:83, pct:89, color:'#C4451A', tags:['Jazz','Fusion','Avant-Garde'] },
+  { name:'analoguehours', location:'Austin, TX', rating:'5.0', trades:21, pct:82, color:'#2A6B3C', tags:['Jazz','Columbia','1950s–60s'] },
+];
+
+const SPINE_COLORS = ['#8B1A1A','#2C4A2E','#1A3A5C','#5C3A1A','#4A1A5C','#1A4A3A','#5C4A1A','#2C1A5C','#1A5C2C','#4A3A1A','#5C1A3A','#1A1A5C'];
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function goToScreen(n) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+n).classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach((item, i) => {
+    item.classList.remove('active','done');
+    if (i < n) item.classList.add('done');
+    if (i === n) item.classList.add('active');
+  });
+  const pct = Math.round(((n+1)/7)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('stepLabel').textContent = 'Step '+(n+1)+' of 6';
+  state.currentScreen = n;
+  window.scrollTo(0,0);
+}
+
+function sidebarNav(n) {
+  if (n <= state.currentScreen) goToScreen(n);
+}
+
+// ══════════════════════════════════════════
+// SCREEN 0: SIGN UP
+// ══════════════════════════════════════════
+function formatUsername(el) {
+  let v = el.value.replace(/[^a-zA-Z0-9_]/g,'');
+  if (v && !v.startsWith('@')) v = '@'+v;
+  el.value = v;
+}
+
+function validateSignup() {
+  const name = document.getElementById('nameInput').value.trim();
+  const user = document.getElementById('usernameInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+  const userCore = user.startsWith('@') ? user.slice(1) : user;
+  const valid = name.length > 1 && userCore.length >= 1 && email.includes('@') && email.includes('.');
+  document.getElementById('signupBtn').disabled = !valid;
+}
+
+function doSignup() {
+  state.name = document.getElementById('nameInput').value.trim();
+  state.username = document.getElementById('usernameInput').value.trim();
+  state.email = document.getElementById('emailInput').value.trim();
+  document.getElementById('userAvatar').textContent = state.name[0].toUpperCase();
+  showToast('👋','Welcome, '+state.name.split(' ')[0]+'! Let\'s build your taste profile.');
+  setTimeout(() => goToScreen(1), 600);
+}
+
+// ══════════════════════════════════════════
+// SCREEN 1: TASTE PROFILE
+// ══════════════════════════════════════════
+function toggleChip(el, type) {
+  el.classList.toggle('selected');
+  const key = type === 'genre' ? 'genres' : 'moods';
+  const label = el.textContent;
+  if (el.classList.contains('selected')) {
+    state[key].push(label);
+  } else {
+    state[key] = state[key].filter(x => x !== label);
+  }
+  const total = state.genres.length + state.moods.length;
+  document.getElementById('tasteCount').textContent =
+    total + ' selected' + (total < 3 ? ' — pick at least 3' : ' ✓');
+  document.getElementById('tasteBtn').disabled = total < 3;
+}
+
+function doTaste() {
+  showToast('🎵', 'Taste profile saved! Now let\'s build your shelf.');
+  setTimeout(() => {
+    renderShelfRecords();
+    goToScreen(2);
+  }, 500);
+}
+
+// ══════════════════════════════════════════
+// SCREEN 2: SHELF
+// ══════════════════════════════════════════
+function renderShelfRecords() {
+  const grid = document.getElementById('shelfRecords');
+  grid.innerHTML = '';
+  SHELF_RECORDS.forEach(r => {
+    const inShelf = state.shelf.some(s => s.id === r.id);
+    const div = document.createElement('div');
+    div.className = 'record-card' + (inShelf ? ' in-shelf' : '');
+    div.innerHTML = `
+      <div class="record-art" style="background:${r.color};">
+        ${renderMiniVinyl(r.color, r.accent)}
+        ${inShelf ? '<div class="record-badge green">✓ Added</div>' : ''}
+      </div>
+      <div class="record-info">
+        <div class="record-title">${r.title}</div>
+        <div class="record-artist">${r.artist}</div>
+      </div>`;
+    div.onclick = () => toggleShelf(r, div);
+    grid.appendChild(div);
+  });
+}
+
+function toggleShelf(record, el) {
+  const idx = state.shelf.findIndex(s => s.id === record.id);
+  if (idx > -1) {
+    state.shelf.splice(idx, 1);
+    el.classList.remove('in-shelf');
+    showToast('📤', `Removed "${record.title}" from shelf`);
+  } else {
+    state.shelf.push(record);
+    el.classList.add('in-shelf');
+    showToast('📥', `Added "${record.title}" to your shelf!`);
+  }
+  updateShelfDisplay();
+}
+
+function updateShelfDisplay() {
+  const container = document.getElementById('shelfSpines');
+  const count = state.shelf.length;
+  document.getElementById('shelfCount').textContent = count;
+
+  if (count === 0) {
+    container.innerHTML = '<div class="shelf-empty">Your records will appear here…</div>';
+  } else {
+    container.innerHTML = '';
+    state.shelf.forEach((r, i) => {
+      const h = 60 + (i % 4)*10;
+      const spine = document.createElement('div');
+      spine.className = 'spine';
+      spine.style.cssText = `background:${SPINE_COLORS[i % SPINE_COLORS.length]}; height:${h}px;`;
+      spine.title = r.title;
+      container.appendChild(spine);
+    });
+  }
+  const btn = document.getElementById('shelfBtn');
+  btn.disabled = count < 2;
+  document.getElementById('shelfHint').textContent =
+    count < 2 ? 'Add at least 2 records' : count + ' records added ✓';
+}
+
+function doShelf() {
+  showToast('📚', 'Shelf saved! '+state.shelf.length+' records. Now let\'s find you something new.');
+  setTimeout(() => {
+    renderDiscoverRecords();
+    addLiveFeedItem('🎉 '+state.username+' just joined Groove and built their first shelf!');
+    goToScreen(3);
+  }, 500);
+}
+
+// ══════════════════════════════════════════
+// SCREEN 3: DISCOVER
+// ══════════════════════════════════════════
+function renderDiscoverRecords(filter) {
+  const grid = document.getElementById('discoverRecords');
+  grid.innerHTML = '';
+  let records = DISCOVER_RECORDS;
+  if (filter) {
+    const q = filter.toLowerCase();
+    records = records.filter(r =>
+      r.title.toLowerCase().includes(q) || r.artist.toLowerCase().includes(q) ||
+      r.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }
+  if (records.length === 0) {
+    grid.innerHTML = '<p style="color:var(--muted); font-size:0.9rem; grid-column:1/-1; padding:1rem 0;">No records found — try another search</p>';
+    return;
+  }
+  records.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'record-card';
+    div.innerHTML = `
+      <div class="record-art" style="background:${r.color};">
+        ${renderMiniVinyl(r.color, r.accent)}
+        <div class="record-badge">${r.match} match</div>
+      </div>
+      <div class="record-info">
+        <div class="record-title">${r.title}</div>
+        <div class="record-artist">${r.artist}</div>
+        <div class="record-price">${r.price}</div>
+      </div>`;
+    div.onclick = () => selectRecord(r);
+    grid.appendChild(div);
+  });
+}
+
+function filterRecords() {
+  const q = document.getElementById('searchInput').value;
+  renderDiscoverRecords(q);
+}
+
+function selectRecord(record) {
+  state.selectedRecord = record;
+  renderMatchScreen(record);
+  showToast('🔍', 'Finding matched sellers for '+record.title+'…');
+  setTimeout(() => goToScreen(4), 500);
+}
+
+function addLiveFeedItem(text) {
+  const feed = document.getElementById('liveFeed').querySelector('.feed-item:first-child');
+  const newItem = document.createElement('div');
+  newItem.className = 'feed-item';
+  newItem.innerHTML = `<span class="feed-time">now</span><span>${text}</span>`;
+  document.getElementById('liveFeed').appendChild(newItem);
+}
+
+// ══════════════════════════════════════════
+// SCREEN 4: MATCH
+// ══════════════════════════════════════════
+function renderMatchScreen(record) {
+  document.getElementById('matchTitle').textContent = 'Now playing: ' + record.title;
+  document.getElementById('matchSub').textContent =
+    'Groove found these sellers based on taste compatibility — not just price. Select one to proceed.';
+
+  // ── Turntable + record info ──────────────────────────────
+  const grooveStyle = `
+    radial-gradient(circle at 50% 50%, ${record.accent} 0%, ${record.accent}cc 28%, transparent 28.5%),
+    repeating-radial-gradient(
+      circle at 50%,
+      #111 0px, #111 1px,
+      #1c1c1c 1px, #1c1c1c 2.5px,
+      #141414 2.5px, #141414 4px,
+      #1a1a1a 4px, #1a1a1a 5px
+    )`;
+
+  const det = document.getElementById('selectedRecordDetail');
+  det.innerHTML = `
+    <div class="match-turntable-wrap">
+      <div class="match-turntable" id="matchTurntable">
+        <div class="match-platter-well"></div>
+        <div class="match-mat"></div>
+        <div class="match-record" id="matchRecord" style="background:${grooveStyle};"></div>
+        <div class="match-tonearm-base"></div>
+        <div class="match-tonearm" id="matchTonearm"></div>
+        <div class="match-led"></div>
+        <div class="match-speed-btns">
+          <div class="match-speed-btn active" onclick="setMatchSpeed('33',this)">33⅓</div>
+          <div class="match-speed-btn" onclick="setMatchSpeed('45',this)">45</div>
+        </div>
+      </div>
+
+      <div class="match-record-info">
+        <div class="match-record-title">${record.title}</div>
+        <div class="match-record-artist">${record.artist}</div>
+        <div class="match-record-meta">
+          ${record.tags.map(t => `<span class="mini-tag">${t}</span>`).join('')}
+          <span class="match-price-badge">${record.price}</span>
+        </div>
+      </div>
+    </div>`;
+
+  // ── Sellers list ─────────────────────────────────────────
+  const list = document.getElementById('matchList');
+  list.innerHTML = '';
+  SELLERS.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'match-row';
+    row.innerHTML = `
+      <div class="match-avatar" style="background:${s.color};">${s.name[0].toUpperCase()}</div>
+      <div>
+        <div class="match-name">@${s.name}</div>
+        <div class="match-meta">${s.location} · ⭐ ${s.rating} · ${s.trades} trades</div>
+        <div class="match-tags-row">${s.tags.map(t=>`<span class="mini-tag">${t}</span>`).join('')}</div>
+      </div>
+      <div class="match-pct">
+        <div class="match-pct-num">${s.pct}%</div>
+        <div class="match-pct-lbl">taste match</div>
+      </div>`;
+    row.onclick = () => selectSeller(s, row);
+    list.appendChild(row);
+  });
+}
+
+function setMatchSpeed(rpm, btn) {
+  document.querySelectorAll('.match-speed-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const r = document.getElementById('matchRecord');
+  if (r) r.style.animationDuration = rpm === '45' ? '1.5s' : '2.2s';
+}
+
+function selectSeller(seller, el) {
+  document.querySelectorAll('.match-row').forEach(r => r.classList.remove('chosen'));
+  el.classList.add('chosen');
+  state.selectedSeller = seller;
+  document.getElementById('matchBtn').disabled = false;
+  showToast('✓', '@'+seller.name+' selected — '+seller.pct+'% taste match');
+}
+
+function doMatch() {
+  renderConfirmScreen();
+  goToScreen(5);
+}
+
+// ══════════════════════════════════════════
+// SCREEN 5: CONFIRM & PAY
+// ══════════════════════════════════════════
+function renderConfirmScreen() {
+  const r = state.selectedRecord;
+  const s = state.selectedSeller;
+  const price = parseFloat(r.price.replace('$',''));
+  const fee = (price * 0.08).toFixed(2);
+  const total = (price + parseFloat(fee)).toFixed(2);
+
+  document.getElementById('confirmBox').innerHTML = `
+    <div class="confirm-row"><span class="confirm-label">Record</span><span class="confirm-value">${r.title} — ${r.artist}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Seller</span><span class="confirm-value">@${s.name} · ⭐ ${s.rating}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Taste match</span><span class="confirm-value" style="color:var(--rust);">${s.pct}%</span></div>
+    <div class="confirm-row"><span class="confirm-label">Condition</span><span class="confirm-value">VG+ / NM (seller-graded)</span></div>
+    <div class="confirm-row"><span class="confirm-label">Record price</span><span class="confirm-value">${r.price}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Groove fee (8%)</span><span class="confirm-value">$${fee}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Shipping</span><span class="confirm-value">$4.50 (USPS Media Mail)</span></div>
+    <div class="confirm-row"><span class="confirm-label">Total</span><span class="confirm-value confirm-total">$${(parseFloat(total)+4.50).toFixed(2)}</span></div>`;
+}
+
+function formatCard(el) {
+  let v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.replace(/(.{4})/g,'$1 ').trim();
+}
+
+function validatePayment() {
+  const addr = document.getElementById('addressInput').value.trim();
+  const card = document.getElementById('cardInput').value.replace(/\s/g,'');
+  document.getElementById('payBtn').disabled = !(addr.length > 5 && card.length === 16);
+}
+
+function doPay() {
+  const r = state.selectedRecord;
+  const s = state.selectedSeller;
+  document.getElementById('successMsg').textContent =
+    `Your copy of "${r.title}" by ${r.artist} is on its way from @${s.name} in ${s.location}. Payment is held in escrow — you'll release it once the record arrives.`;
+  document.getElementById('successStats').innerHTML = `
+    <div class="stat-pill">Seller: <span>@${s.name}</span></div>
+    <div class="stat-pill">Match: <span>${s.pct}%</span></div>
+    <div class="stat-pill">ETA: <span>5–7 days</span></div>`;
+  showToast('🎉', 'Purchase confirmed! Check your email for details.');
+
+  // Colour the vinyl label to match the purchased record's accent colour
+  const record = document.getElementById('vinylRecord');
+  if (record && r.accent) {
+    // Darken accent slightly for the inner ring of the label
+    record.style.background = `
+      radial-gradient(circle at 50% 50%, ${r.accent} 0%, ${r.accent}cc 28%, transparent 28.5%),
+      repeating-radial-gradient(
+        circle at 50%,
+        #111 0px, #111 1px,
+        #1c1c1c 1px, #1c1c1c 2.5px,
+        #141414 2.5px, #141414 4px,
+        #1a1a1a 4px, #1a1a1a 5px
+      )`;
+  }
+
+  // Wire up speed buttons
+  document.querySelectorAll('.speed-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const rpm = this.textContent.includes('45') ? '1.5s' : '2.2s';
+      if (record) record.style.animationDuration = rpm;
+    });
+  });
+
+  setTimeout(() => goToScreen(6), 800);
+}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function renderMiniVinyl(bg, accent) {
+  return `<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="${bg}"/>
+    <circle cx="50" cy="50" r="38" fill="#111"/>
+    <circle cx="50" cy="50" r="28" fill="none" stroke="#222" stroke-width="4"/>
+    <circle cx="50" cy="50" r="20" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+    <circle cx="50" cy="50" r="13" fill="${bg}"/>
+    <circle cx="50" cy="50" r="10" fill="none" stroke="${accent}" stroke-width="1.5"/>
+    <circle cx="50" cy="50" r="3" fill="${accent}"/>
+  </svg>`;
+}
+
+let toastTimer;
+function showToast(icon, msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = icon;
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function restart() {
+  state.name = ''; state.username = ''; state.email = '';
+  state.genres = []; state.moods = [];
+  state.shelf = []; state.selectedRecord = null; state.selectedSeller = null;
+  document.getElementById('nameInput').value = '';
+  document.getElementById('usernameInput').value = '';
+  document.getElementById('emailInput').value = '';
+  document.getElementById('signupBtn').disabled = true;
+  document.getElementById('userAvatar').textContent = '?';
+  document.querySelectorAll('.chip.selected').forEach(c => c.classList.remove('selected'));
+  document.getElementById('tasteBtn').disabled = true;
+  document.getElementById('tasteCount').textContent = '0 selected — pick at least 3';
+  updateShelfDisplay();
+  goToScreen(0);
+}
+
+// Init discover records on load
+renderDiscoverRecords();
+</script>
+
+  </div>
+</div>
+<button class="app-close-btn" id="appCloseBtn" onclick="closeApp()" title="Close">✕</button>
+
+</body>
+</html>
